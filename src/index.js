@@ -94,6 +94,7 @@ class IC {
       // to the preBlockElements array
       const preBlockElements = blockElements.map((els) => {
         const pre = document.createElement("pre");
+        pre.setAttribute("data-before", blockName);
 
         els.forEach((el) => {
           pre.appendChild(el);
@@ -215,7 +216,6 @@ class IC {
 
         this._setOpacityLineByLine(
           block,
-          //   "opacity",
           null,
           1,
           0,
@@ -243,7 +243,7 @@ class IC {
     propEnd,
     scrollCurrent,
     scrollStart,
-    transitionLength = 100
+    transitionLength = 1
   ) {
     let val;
     let percentage = Math.max(
@@ -265,19 +265,27 @@ class IC {
     } else {
       for (line of block.getElementsByTagName("div")) {
         if (line.classList.contains("__ic_added")) {
-          line.style.marginLeft = this.code.clientWidth * percentage;
-          line.style.opacity = 1 - percentage;
-        } else if (line.classList.contains("__ic_removed")) {
-          line.style.marginLeft = -1 * this.code.clientWidth * (1 - percentage);
-          line.style.opacity = percentage;
-
-          if (percentage === 1) {
-            line.style.height = 16;
+          if (percentage === 0) {
+            // line.style.height = 16;
+            line.style.marginLeft = 0;
+            line.style.opacity = 1;
           } else {
-            line.style.height = 0;
+            // line.style.height = 0;
+            line.style.marginLeft = this.code.clientWidth;
+            line.style.opacity = 0;
+          }
+        } else if (line.classList.contains("__ic_removed")) {
+          if (percentage === 1) {
+            // line.style.height = 16;
+            line.style.marginLeft = 0;
+            line.style.opacity = 1;
+          } else {
+            // line.style.height = 0;
+            line.style.marginLeft = -1 * this.code.clientWidth;
+            line.style.opacity = 0;
           }
         } else if (line.classList.contains("__ic_same")) {
-          line.style.opacity = 0.5;
+          line.style.opacity = 0.7;
         }
       }
     }
