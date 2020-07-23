@@ -1,3 +1,5 @@
+require("./index.scss");
+
 const marked = require("marked");
 const diff = require("diff");
 
@@ -15,7 +17,7 @@ const diff = require("diff");
  * @member {Object<string,HTMLElement[]]>} codeBlockElMap A map from __bid_<filename>_<index>
  * to the actual "pre" dom elements displayed in the code section of the page.
  */
-class IC {
+class FC {
   /**
    *
    * @param {HTMLElement} domElement
@@ -293,5 +295,5 @@ class IC {
 }
 
 module.exports = {
-  IC,
+  FC,
 };

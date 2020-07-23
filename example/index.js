@@ -1,8 +1,8 @@
-const ic = require("../src/index.js");
+const fancyCode = require("../src/index.js");
 
 const el = document.getElementById("content");
 
-const page = new ic.IC(el);
+const page = new fancyCode.FC(el);
 page.parse(`
 # Markdown example!
 
