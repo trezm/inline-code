@@ -1,0 +1,32 @@
+.__ic_container {
+  display: flex;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.__ic_code {
+  min-width: 400px;
+}
+
+.__ic_added {
+  color: #70e680;
+}
+
+.__ic_removed {
+  color: #e67070;
+}
+
+.__ic_same {
+  color: #696969;
+}
+
+.__ic_code pre .__ic_line {
+  transition: height 0.2s;
+  height: 16px;
+  opacity: 0;
+}
+
+.__ic_markdown .marker {
+  height: 20px;
+  background-color: #f0f;
+}
