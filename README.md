@@ -2,6 +2,20 @@
 
 Some nice animations for your next coding article.
 
+## Try it!
+
+Clone the repo, then
+
+```
+npm install
+```
+
+then
+
+```
+npm start
+```
+
 ## Installation
 
 ```bash
