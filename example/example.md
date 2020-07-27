@@ -30,6 +30,7 @@ console.log('i + 1:', i + s);
 Sed odio morbi quis commodo odio aenean sed. Quis auctor elit sed vulputate. In egestas erat imperdiet sed euismod nisi. Eget velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor. Habitant morbi tristique senectus et netus et malesuada fames. Ut sem viverra aliquet eget sit amet tellus cras adipiscing. Ullamcorper malesuada proin libero nunc. Iaculis at erat pellentesque adipiscing. Est sit amet facilisis magna etiam tempor. Mauris pharetra et ultrices neque ornare aenean euismod elementum nisi. Vulputate ut pharetra sit amet aliquam. Leo in vitae turpis massa sed elementum tempus egestas.
 
 ```temp.js
+const a = 0;
 const s = 1;
 const t = 2;
 

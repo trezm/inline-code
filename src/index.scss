@@ -10,6 +10,10 @@
   padding: 0;
 }
 
+.__ic_container .__ic_markdown {
+  padding: 0 0 0 20px;
+}
+
 .__ic_code {
   width: 400px;
   min-width: 400px;
@@ -39,10 +43,27 @@
 }
 
 // .__ic_code pre :not(.__ic_collapsed) + .__ic_collapsed:before,
-// .__ic_code pre .__ic_collapsed + :not(.__ic_collapsed):before {
-//   content: "...";
-//   display: block;
-// }
+.__ic_code
+  pre:not(.__ic_uncollapsed)
+  .__ic_line.__ic_collapsed
+  + :not(.__ic_collapsed):before {
+  content: "...";
+  display: block;
+}
+.__ic_code
+  pre:not(.__ic_uncollapsed)
+  .__ic_line.__ic_collapsed
+  + :not(.__ic_collapsed) {
+  // Compensates for the height of the ellipses
+  height: 32px;
+}
+
+.__ic_code
+  pre:not(.__ic_uncollapsed)
+  .__ic_line_number.__ic_collapsed
+  + :not(.__ic_collapsed) {
+  padding: 16px 0 0 0;
+}
 
 .__ic_code pre {
   overflow-x: scroll;
