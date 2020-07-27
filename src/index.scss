@@ -4,17 +4,23 @@
   max-width: 1000px;
 }
 
+.__ic_container .hljs {
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+  padding: 0;
+}
+
 .__ic_code {
   width: 400px;
   min-width: 400px;
 }
 
 .__ic_added {
-  color: #70e680;
+  background-color: #70e68022;
 }
 
 .__ic_removed {
-  color: #e67070;
+  background-color: #e6707022;
 }
 
 .__ic_same {
@@ -23,17 +29,49 @@
 .__ic_code pre .__ic_line {
   transition: all 0.5s;
   height: 16px;
-  opacity: 0;
+  opacity: 0.5;
 }
+
+.__ic_code pre:not(.__ic_uncollapsed) .__ic_collapsed,
+.__ic_code pre:not(.__ic_uncollapsed) .__ic_line_number.__ic_collapsed {
+  opacity: 0;
+  height: 0;
+}
+
+// .__ic_code pre :not(.__ic_collapsed) + .__ic_collapsed:before,
+// .__ic_code pre .__ic_collapsed + :not(.__ic_collapsed):before {
+//   content: "...";
+//   display: block;
+// }
 
 .__ic_code pre {
   overflow-x: scroll;
   max-width: 400px;
   padding-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.__ic_code pre .__ic_line_numbers {
+  width: 30px;
+}
+
+.__ic_code pre .__ic_line_number {
+  transition: all 0.5s;
+
+  line-height: 16px;
+  height: 16px;
 }
 
 .__ic_code pre:before {
   content: attr(data-before);
+  cursor: pointer;
+  width: 400px;
+}
+
+.__ic_code pre code {
+  width: 370px;
 }
 
 .__ic_markdown .marker {
