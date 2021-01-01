@@ -43,13 +43,36 @@ class FC {
    */
   parse(markdownString) {
     this.markdown.innerHTML = marked(markdownString);
+
+    const nodeIterator = document.createNodeIterator(
+      this.markdown,
+      NodeFilter.SHOW_COMMENT
+    );
+
+    let commentNode = nodeIterator.nextNode();
+    const fileIds = [];
+    while (commentNode) {
+      const split = commentNode.textContent.split(":");
+
+      if (split[0].trim() === "- file") {
+        const id = split[1].trim();
+        fileIds.push(id);
+      }
+
+      commentNode = nodeIterator.nextNode();
+    }
+
+
     const preBlocks = Array.from(this.markdown.getElementsByTagName("pre"));
 
     this.codeBlockMap = {};
-    preBlocks.forEach((preBlock) => {
+    preBlocks.forEach((preBlock, index) => {
       const marker = document.createElement("div");
       const codeBlock = preBlock.getElementsByTagName("code")[0];
-      const blockIdentifier = codeBlock.className.replace("language-", "");
+      console.log('index:', index);
+      console.log('fileIds[index]', fileIds[index]);
+      const blockIdentifier = fileIds[index];
+      // const blockIdentifier = codeBlock.className.replace("language-", "");
 
       this.markdown.replaceChild(marker, preBlock);
       const existingCodeBlocksForIdentifier =
