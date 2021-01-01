@@ -69,15 +69,14 @@ class FC {
     preBlocks.forEach((preBlock, index) => {
       const marker = document.createElement("div");
       const codeBlock = preBlock.getElementsByTagName("code")[0];
-      console.log('index:', index);
-      console.log('fileIds[index]', fileIds[index]);
       const blockIdentifier = fileIds[index];
       // const blockIdentifier = codeBlock.className.replace("language-", "");
 
       this.markdown.replaceChild(marker, preBlock);
       const existingCodeBlocksForIdentifier =
         this.codeBlockMap[blockIdentifier] || [];
-      marker.className = `marker __bid_${blockIdentifier}_${existingCodeBlocksForIdentifier.length}`;
+      marker.className = `marker`;
+      marker.id = `__bid_${blockIdentifier}_${existingCodeBlocksForIdentifier.length}`;
 
       const styledCodeBlock = this._addLinesToCodeBlock(codeBlock);
       this.codeBlockMap[
@@ -118,7 +117,7 @@ class FC {
 
       // Wrap each set of code block lines in a pre tag and add them
       // to the preBlockElements array
-      const preBlockElements = blockElements.map((els) => {
+      const preBlockElements = blockElements.map((els, index) => {
         const pre = document.createElement("pre");
         pre.setAttribute("data-before", blockName);
         const code = document.createElement("code");
@@ -175,6 +174,7 @@ class FC {
         pre.addEventListener("click", (e) => {
           pre.classList.toggle("__ic_uncollapsed");
         });
+        pre.id = `__cid_${blockName}_${index}`;
 
         pre.classList.add(blockName.split(".").pop());
         hltr.highlightBlock(code);
@@ -271,15 +271,36 @@ class FC {
 
       for (let i = 0; i < blocks.length; i++) {
         const block = blocks[i];
-        const marker = this.markdown.getElementsByClassName(
+        const marker = document.getElementById(
           `__bid_${blockName}_${i}`
-        )[0];
+        );
 
         block.style.position = "absolute";
         block.style.top = marker.offsetTop - block.clientHeight / 2;
+
         // Set an extra prop on the block so that we can check if
         // it is currently visible or not.
         block.isVisible = false;
+      }
+    }
+
+    const allBlocks = Object.values(this.codeBlockElMap)
+      .reduce((a, b) => a.concat(b), [])
+      .sort((a, b) => a.style.top - b.style.top);
+
+    for (let i = 1; i < allBlocks.length; i++) {
+      const lastBlock = allBlocks[i - 1];
+      const block = allBlocks[i];
+
+      const lastBlockBottom = Number(lastBlock.style.top.replace("px", "")) + lastBlock.clientHeight;
+      const thisBlockTop = Number(block.style.top.replace("px", ""));
+
+      if (thisBlockTop < lastBlockBottom) {
+        const diff = lastBlockBottom - thisBlockTop;
+
+        const marker = document.getElementById(block.id.replace("__cid", "__bid"));
+        marker.style.marginTop = `${diff}px`;
+        block.style.top = `${thisBlockTop + diff}px`;
       }
     }
   }

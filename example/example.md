@@ -39,7 +39,7 @@ const t = 2;
 
 for (let i = 0; i < 10; i++) {
     console.log('i - 1:', i - s);
-    console.log('i _ 2:', i _ t);
+    console.log('i - 2:', i _ t);
 }
 
 ```
@@ -69,3 +69,21 @@ fn main() {
 ```
 
 Convallis posuere morbi leo urna molestie. Erat pellentesque adipiscing commodo elit at. Curabitur gravida arcu ac tortor dignissim. Ut placerat orci nulla pellentesque dignissim enim. Elementum nisi quis eleifend quam adipiscing. Fermentum odio eu feugiat pretium nibh ipsum consequat. Pharetra pharetra massa massa ultricies. Sit amet facilisis magna etiam tempor orci eu lobortis. Ac turpis egestas maecenas pharetra. Quam adipiscing vitae proin sagittis nisl rhoncus mattis. Risus pretium quam vulputate dignissim suspendisse in. Vulputate odio ut enim blandit volutpat maecenas volutpat blandit. In hendrerit gravida rutrum quisque non tellus orci ac auctor. Mattis nunc sed blandit libero volutpat sed cras ornare. Turpis egestas sed tempus urna et pharetra pharetra massa. Nisl rhoncus mattis rhoncus urna neque viverra justo.
+
+<!--- file:test1.js -->
+```js
+function test1() {
+    console.log('test1')
+}
+```
+
+Do this then...
+
+<!--- file:test2.js -->
+```js
+function test2() {
+    console.log('test2')
+}
+```
+
+Do this.
