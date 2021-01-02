@@ -66,6 +66,7 @@ class FC {
     const preBlocks = Array.from(this.markdown.getElementsByTagName("pre"));
 
     this.codeBlockMap = {};
+    this.codeBlocksInOrder = [];
     preBlocks.forEach((preBlock, index) => {
       const marker = document.createElement("div");
       const codeBlock = preBlock.getElementsByTagName("code")[0];
@@ -76,12 +77,14 @@ class FC {
       const existingCodeBlocksForIdentifier =
         this.codeBlockMap[blockIdentifier] || [];
       marker.className = `marker`;
-      marker.id = `__bid_${blockIdentifier}_${existingCodeBlocksForIdentifier.length}`;
+      const blockIndex = existingCodeBlocksForIdentifier.length;
+      marker.id = `__bid_${blockIdentifier}_${blockIndex}`;
 
       const styledCodeBlock = this._addLinesToCodeBlock(codeBlock);
       this.codeBlockMap[
         blockIdentifier
       ] = existingCodeBlocksForIdentifier.concat([styledCodeBlock]);
+      this.codeBlocksInOrder.push({bid: blockIdentifier, blockIndex, blocks: styledCodeBlock});
     });
 
     this._generateDomForCode();
@@ -180,12 +183,18 @@ class FC {
         hltr.highlightBlock(code);
 
         // Append the new pre tag to the code section of the DOM
-        this.code.appendChild(pre);
+        // this.code.appendChild(pre);
         return pre;
       });
 
       this.codeBlockElMap[blockName] = preBlockElements;
     }
+
+    this.codeBlocksInOrder.forEach((v) => {
+      const associatedBlocks = this.codeBlockElMap[v.bid];
+
+      this.code.appendChild(associatedBlocks[v.blockIndex]);
+    });
   }
 
   /**
@@ -266,43 +275,74 @@ class FC {
   }
 
   _updateVerticalPositionsForCodeBlocks() {
-    for (const blockName in this.codeBlockElMap) {
-      const blocks = this.codeBlockElMap[blockName];
+    const preBlocks = document.getElementsByTagName("pre");
+    const _markerBlocks = document.getElementsByClassName("marker");
 
-      for (let i = 0; i < blocks.length; i++) {
-        const block = blocks[i];
-        const marker = document.getElementById(
-          `__bid_${blockName}_${i}`
-        );
+    const markerBlocks = [];
+    for (let i = 0; i < _markerBlocks.length; i++) {
+      const markerBlock = _markerBlocks[i];
 
-        block.style.position = "absolute";
-        block.style.top = marker.offsetTop - block.clientHeight / 2;
-
-        // Set an extra prop on the block so that we can check if
-        // it is currently visible or not.
-        block.isVisible = false;
-      }
+      markerBlocks.push(markerBlock.previousElementSibling);
     }
 
-    const allBlocks = Object.values(this.codeBlockElMap)
-      .reduce((a, b) => a.concat(b), [])
-      .sort((a, b) => a.style.top - b.style.top);
+    if (preBlocks.length !== markerBlocks.length) {
+      console.warn(`Warning: The number of code blocks (${preBlocks.length}) differs from the number of code markers (${markerBlocks.length})`);
+    }
 
-    for (let i = 1; i < allBlocks.length; i++) {
-      const lastBlock = allBlocks[i - 1];
-      const block = allBlocks[i];
+    for (let i = 0; i < preBlocks.length; i++) {
+      const pre = preBlocks[i];
+      const marker = markerBlocks[i];
 
-      const lastBlockBottom = Number(lastBlock.style.top.replace("px", "")) + lastBlock.clientHeight;
-      const thisBlockTop = Number(block.style.top.replace("px", ""));
+      if (!pre || !marker) {
+        break;
+      }
 
-      if (thisBlockTop < lastBlockBottom) {
-        const diff = lastBlockBottom - thisBlockTop;
-
-        const marker = document.getElementById(block.id.replace("__cid", "__bid"));
-        marker.style.marginTop = `${diff}px`;
-        block.style.top = `${thisBlockTop + diff}px`;
+      // If the pre is higher than the marker, move the marker.
+      if (pre.offsetTop > marker.offsetTop) {
+        marker.style.marginTop = `${pre.offsetTop - marker.offsetTop}px`;
+      // If the marker is higher than the pre, move the pre.
+      } else {
+        pre.style.marginTop = `${marker.offsetTop - pre.offsetTop}px`;
       }
     }
+    // for (const blockName in this.codeBlockElMap) {
+    //   const blocks = this.codeBlockElMap[blockName];
+
+    //   for (let i = 0; i < blocks.length; i++) {
+    //     const block = blocks[i];
+    //     const marker = document.getElementById(
+    //       `__bid_${blockName}_${i}`
+    //     );
+
+    //     block.style.position = "absolute";
+    //     block.style.top = marker.offsetTop - block.clientHeight / 2;
+
+    //     // Set an extra prop on the block so that we can check if
+    //     // it is currently visible or not.
+    //     block.isVisible = false;
+    //   }
+    // }
+
+    // const allBlocks = Object.values(this.codeBlockElMap)
+    //   .reduce((a, b) => a.concat(b), [])
+    //   .sort((a, b) => a.style.top - b.style.top);
+
+    // for (let i = 1; i < allBlocks.length; i++) {
+    //   const lastBlock = allBlocks[i - 1];
+    //   const block = allBlocks[i];
+
+    //   const lastBlockBottom = Number(lastBlock.style.top.replace("px", "")) + lastBlock.clientHeight;
+    //   const thisBlockTop = Number(block.style.top.replace("px", ""));
+
+    //   if (thisBlockTop < lastBlockBottom) {
+    //     const diff = lastBlockBottom - thisBlockTop;
+
+    //     const marker = document.getElementById(block.id.replace("__cid", "__bid"));
+
+    //     marker.style.marginTop = `${diff}px`;
+    //     block.style.top = `${thisBlockTop + diff}px`;
+    //   }
+    // }
   }
 
   _scroll(e) {
