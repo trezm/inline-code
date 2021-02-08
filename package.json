@@ -14,7 +14,7 @@
   "dependencies": {
     "diff": "^4.0.2",
     "highlight.js": "^10.1.2",
-    "marked": "^1.1.1",
+    "marked": "^2.0.0",
     "@parcel/bundler-default": "^2.0.0-beta.1",
     "@parcel/transformer-inline-string": "^2.0.0-beta.3",
     "parcel": "^2.0.0-beta.1",
